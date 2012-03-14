@@ -23,8 +23,13 @@
 		$.ajax({
 			url : this.fetchUrl || this.url,
 			data : {'id' : self.id},
-			success : options.success || function(){
-				populate.apply(this,arguments);
+			success : function(){
+			
+				$.when(
+					populate.apply(self,arguments)
+				).then(
+					options.success()
+				);
 			},
 			error : options.error || function(){
 				console.log("error fetching model");
@@ -35,12 +40,10 @@
 	var populate = function(data, textStatus,jqXHR){
 		if(typeof data === 'object'){
 			for(var key in data){
-				if(this.hasOwnProperty(key)){
-					this[key] = data[key];
-				}
+				this.set(key,data[key]);
 			}
 		}
-
+		console.log(this);
 		//trigger a populate event
 		this.trigger('populate');
 	};
