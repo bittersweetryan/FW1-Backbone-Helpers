@@ -13,6 +13,9 @@ When calling a model's save method pass in an object that includes:
 * success - callback function to be called when the AJAX method returns success
 * error - callback function to be called when the AJAX method returns error
 
+
+When calling fetch the method will try to automatically populate the model with data from the return value so its good to return json data that has the same keys as your model object.
+
 ###Example:
 
 ```js
