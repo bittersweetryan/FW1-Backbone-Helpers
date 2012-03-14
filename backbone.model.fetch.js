@@ -2,15 +2,27 @@
 	Backbone.Model.prototype.fetch = function(options){
 		//options is a object that expects to have
 		//defaults, success callback, and error callback
+
+		var defaults = {
+				success : function(){
+					console.log("success");
+				},
+
+				error : function(){
+					console.log("error");
+				}
+			},
+			self = this;
+
+		options = _.extend({},defaults,options);
+
 		if(options.defaults){
 			$.ajax.setup(options.defaults);
 		}
 
-		var self = this;
-			
 		$.ajax({
 			url : this.fetchUrl || this.url,
-			data : {id : this.id},
+			data : {'id' : self.id},
 			success : options.success || function(){
 				populate.apply(this,arguments);
 			},
@@ -28,6 +40,9 @@
 				}
 			}
 		}
+
+		//trigger a populate event
+		this.trigger('populate');
 	};
 
 }(jQuery));
