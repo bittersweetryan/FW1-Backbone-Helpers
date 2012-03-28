@@ -1,10 +1,10 @@
-##Override of Backbone Model methods for eaiser use in FW/1 applications.  Uses jQuery's AJAX method.  
+##Override of Backbone Model methods for eaiser use in FW/1 applications.  Uses jQuery's AJAX method
 
-This little function ensures that calling save puts the model's properties directly in the RC.
+These methods will help you use FW/1 with backbone.js in a more native way.  The save override will put a view's properties directly into the RC.   The fetch override will fetch a model and populate its properties, and the view override will populate a view with deep-nested properties (e.g. an object that has {contact : {address: { line1 : "123 fake street."}}} will populate the field with an id of contact.address.line1).
 
 ###Usage
 
-Include backbone.model.save.js after you include backbone on the page and make sure you are using jQuery and not zepto.
+Include backbone.model.save.js, backbone.model.fetch.js, and backbone.view.js after you include backbone on the page and make sure you are using jQuery and not zepto.
 
 In your model you can set the url property which fetch and save will both use so you'd need a smart controller method that would read the properties passed to it. You can also set a models saveUrl and fetchUrl properties respectively to load different url's for each action.  
 
