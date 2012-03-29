@@ -6,12 +6,6 @@
 	Backbone.View.prototype.populate = function(obj,prefix){
 		var elem;
 
-		if(prefix){
-				console.log(prefix);
-				console.log(obj);
-		}
-			
-
 		obj = obj || this.model.attributes;
 
 		if($.isArray(obj)){
@@ -35,7 +29,6 @@
 			}
 			else{
 				if(prefix){
-					console.log(prefix);
 					this.populate(obj[key],prefix + '\\.' + key);
 				}
 				else{
