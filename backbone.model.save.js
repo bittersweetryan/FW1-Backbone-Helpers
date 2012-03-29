@@ -2,7 +2,7 @@
 	Backbone.Model.prototype.save = function(options){
 		//options is a object that expects to have
 		//defaults, success callback, and error callback
-		if(options.defaults){
+		if(options && options.defaults){
 			$.ajax.setup(options.defaults);
 		}
 
@@ -16,13 +16,13 @@
 			})();
 			
 		$.ajax({
-			url : this.url,
+			url : this.saveUrl || this.url,
 			data : data,
 			success : options.success || function(){
-				console.log("success saving model");
+				//console.log("success saving model");
 			},
 			error : options.error || function(){
-				console.log("error saving model");
+				//console.log("error saving model");
 			}
 		});
 	};
