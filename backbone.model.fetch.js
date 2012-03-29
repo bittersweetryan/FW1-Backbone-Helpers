@@ -5,11 +5,11 @@
 
 		var defaults = {
 				success : function(){
-					console.log("success");
+					//console.log("success");
 				},
 
 				error : function(){
-					console.log("error");
+					//console.log("error");
 				}
 			},
 			self = this;
@@ -20,19 +20,18 @@
 			$.ajax.setup(options.defaults);
 		}
 
-		$.ajax({
+		return $.ajax({
 			url : this.fetchUrl || this.url,
 			data : {'id' : self.id},
 			success : function(){
-			
 				$.when(
-					populate.apply(self,arguments)
+					populate.apply(self,Array.prototype.slice.call(arguments))
 				).then(
-					options.success()
+					options.success.call()
 				);
 			},
 			error : options.error || function(){
-				console.log("error fetching model");
+				//console.log("error fetching model");
 			}
 		});
 	};
@@ -43,7 +42,6 @@
 				this.set(key,data[key]);
 			}
 		}
-		console.log(this);
 		//trigger a populate event
 		this.trigger('populate');
 	};
