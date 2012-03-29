@@ -2,7 +2,9 @@
 	Backbone.Model.prototype.save = function(options){
 		//options is a object that expects to have
 		//defaults, success callback, and error callback
-		if(options && options.defaults){
+		options = options || {};
+		
+		if(options.defaults){
 			$.ajax.setup(options.defaults);
 		}
 
