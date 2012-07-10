@@ -2,29 +2,32 @@
 	Backbone.Model.prototype.save = function(options){
 		//options is a object that expects to have
 		//defaults, success callback, and error callback
+
 		options = options || {};
-		
-		if(options.defaults){
-			$.ajax.setup(options.defaults);
+
+		options.ajaxDefaults = _.extend({},this.ajaxDefaults,options.ajaxDefaults);
+
+		if(options.ajaxDefaults){
+			$.ajaxSetup(options.ajaxDefaults);
 		}
 
 		var self = this,
 			data = (function(){
 				var ret = {};
-				for(var attr in self.attributes){
-					ret[attr] = self.attributes[attr];
-				}
-				return ret;
+				ret.test = {};
+				ret.test.temp = {myanem : "Ryan"};
+
+				return self.flatten(self.attributes);
 			})();
 			
 		$.ajax({
 			url : this.saveUrl || this.url,
 			data : data,
 			success : options.success || function(){
-				//console.log("success saving model");
+				console.log("success saving model");
 			},
 			error : options.error || function(){
-				//console.log("error saving model");
+				console.log("error saving model");
 			}
 		});
 	};

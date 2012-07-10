@@ -1,46 +1,59 @@
 (function(){
 //this would benefit from a memoization pattern to decrease the number
-//of loops periteration
+//of loops per iteration
 
 //this should have a callback to it as well, that way we can use a deferred
 	Backbone.View.prototype.populate = function(obj,prefix){
-		var elem;
+		var self = this;
 
-		obj = obj || this.model.attributes;
+		return $.Deferred( function(dfd){
+			var elem;
 
-		if($.isArray(obj)){
-			for(var i = 0; i < obj.length; i++){
-				this.populate(obj[i]);
-			}
-		}
+			obj = obj || self.model.attributes;
 
-		for(var key in obj){
-
-			if(typeof obj[key] === 'string'){
-				$elem = $("#" + key);
-
-				if(!$elem.length){
-					$elem = $("#" + prefix + '\\.' + key);
-				}
-
-				if($elem.length){
-					this.set($elem,obj[key]);
+			if($.isArray(obj)){
+				for(var i = 0; i < obj.length; i++){
+					self.populate(obj[i]);
 				}
 			}
-			else{
-				if(prefix){
-					this.populate(obj[key],prefix + '\\.' + key);
+
+			for(var key in obj){
+				if(typeof obj[key] !== 'object'){
+					$elem = self.$el.find("#" + key);
+
+					if(!$elem.length){
+						$elem = self.$el.find("#" + prefix + '\\.' + key);
+					}
+
+					if($elem.length){
+						self.set($elem,obj[key]);
+					}
 				}
 				else{
-					this.populate(obj[key],key);
+					if(prefix){
+						self.populate(obj[key],prefix + '\\.' + key);
+					}
+					else{
+						self.populate(obj[key],key);
+					}
 				}
 			}
-		}
+
+			dfd.resolve();
+
+		}).promise();
 	};
 
 	Backbone.View.prototype.set = function($elem, val){
+		if($elem.is(":radio")){
 
-		if($elem.is("input")){
+			$elem = $elem.filter("[value=" + val + "]");
+
+			if($elem.length){
+				$elem.attr('checked',true);
+			}
+		}
+		else if($elem.is("input") || $elem.is("select")){
 			$elem.val(val);
 		}
 		else{
